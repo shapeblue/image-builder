@@ -14,6 +14,12 @@
 ---
 - hosts: all
   become: yes
+  become_user: root
+  # become_method: su
+  # pre_tasks:
+  #   - name: disable fingerprint checking that may be enabled; when enabled, causes ssh issues
+  #     command: authconfig --disablefingerprint --update
+  #     sudo: yes
 
   tasks:
     - include_role:
