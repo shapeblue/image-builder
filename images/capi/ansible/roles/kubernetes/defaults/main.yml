@@ -20,15 +20,15 @@ kubernetes_bins:
 - kubelet
 
 kubernetes_primary_imgs:
-- kube-apiserver.tar
-- kube-controller-manager.tar
-- kube-scheduler.tar
-- kube-proxy.tar
+- kube-apiserver
+- kube-controller-manager
+- kube-scheduler
+- kube-proxy
 
 kubernetes_additional_imgs:
-- pause.tar
-- coredns.tar
-- etcd.tar
+- public.ecr.aws/eks-distro/kubernetes/pause:v1.20.4-eks-1-20-1
+- public.ecr.aws/eks-distro/coredns/coredns:v1.8.3-eks-1-20-1
+- public.ecr.aws/eks-distro/kubernetes/pause:v1.20.4-eks-1-20-1
 
 kubernetes_load_additional_imgs: false
 

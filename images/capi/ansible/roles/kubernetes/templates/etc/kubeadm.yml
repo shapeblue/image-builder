@@ -1,7 +1,15 @@
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
+dns:
+  type: CoreDNS
+  imageRepository: public.ecr.aws/eks-distro/coredns
+  imageTag: v1.8.3-eks-1-20-1
+etcd:
+  local:
+      imageRepository: public.ecr.aws/eks-distro/etcd-io
+      imageTag: v3.4.15-eks-1-20-1
 imageRepository: {{ kubernetes_container_registry }}
-kubernetesVersion: {{ kubernetes_semver }}
+kubernetesVersion: {{ kubernetes_semver }}-eks-1-20-1
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration

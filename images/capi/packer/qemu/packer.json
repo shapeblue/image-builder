@@ -84,7 +84,8 @@
         "--extra-vars",
         "{{user `ansible_common_vars`}}",
         "--extra-vars",
-        "{{user `ansible_extra_vars`}}"
+        "{{user `ansible_extra_vars`}}",
+        "-vvv"
       ],
       "playbook_file": "./ansible/node.yml",
       "type": "ansible",
@@ -122,8 +123,9 @@
     "kubernetes_rpm_repo": null,
     "kubernetes_rpm_version": null,
     "kubernetes_semver": null,
+    "eks_subversion": null,
     "kubernetes_series": null,
-    "kubernetes_source_type": null,
+    "kubernetes_source_type": "http",
     "machine_id_mode": "444",
     "memory": "2048",
     "output_directory": "./output/{{user `build_name`}}-kube-{{user `kubernetes_semver`}}",

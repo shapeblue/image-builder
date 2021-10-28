@@ -4,8 +4,20 @@
     src: "{{ kubeadm_template }}"
     mode: 0600
 
-- name: Kubeadm pull images
-  shell: 'kubeadm config images pull --config /etc/kubeadm.yml --cri-socket {{ containerd_cri_socket }}'
+- name: Kubeadm list images
+  shell: 'kubeadm config images list --config /etc/kubeadm.yml'
+  register: images_list
+
+- name: Pull images
+  raw: |
+    if [[ {{ item }} =~ "etcd" ]]; then
+      crictl pull public.ecr.aws/eks-distro/etcd-io/etcd:v3.4.15-eks-1-20-1
+    elif [[ {{ item }} =~ "coredns" ]]; then
+      crictl pull public.ecr.aws/eks-distro/coredns/coredns:v1.8.3-eks-1-20-1
+    else
+      crictl pull {{ item }}
+    fi
+  loop: "{{ images_list.stdout_lines }}"  
 
 - name: Delete kubeadm config
   file:

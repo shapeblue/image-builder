@@ -228,7 +228,7 @@ write_files:
       dns:
         type: ""
       etcd: {}
-      imageRepository: k8s.gcr.io
+      imageRepository: public.ecr.aws/eks-distro/kubernetes
       kind: ClusterConfiguration
       kubernetesVersion: 1.17.11
       networking:
@@ -254,7 +254,7 @@ runcmd:
   - "echo \"::1         ipv6-localhost ipv6-loopback\" >/etc/hosts"
   - "echo \"127.0.0.1   localhost {{ ds.meta_data.hostname }}\" >>/etc/hosts"
   - "echo \"{{ ds.meta_data.hostname }}\" >/etc/hostname"
-  - 'kubeadm init --config /tmp/kubeadm.yaml'
+  - 'kubeadm init --config /tmp/kubeadm.yaml' --image-repository public.ecr.aws/eks-distro/kubernetes/
 
 users:
   - name: capv

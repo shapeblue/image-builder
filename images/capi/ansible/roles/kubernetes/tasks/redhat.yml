@@ -32,3 +32,23 @@
       - "kubeadm-{{ kubernetes_rpm_version }}"
       - "kubectl-{{ kubernetes_rpm_version }}"
       - "kubernetes-cni-{{kubernetes_cni_rpm_version }}"
+
+- name: Download Kubernetes binaries comptible with EKS-D
+  get_url:
+    url: "{{ kubernetes_http_source }}/{{ kubernetes_semver }}/bin/linux/{{ kubernetes_goarch }}/{{ item }}"
+    dest: "{{ sysusr_prefix }}/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  loop: "{{ kubernetes_bins }}"
+
+- name: Download Kubernetes images
+  get_url:
+    url: "{{ kubernetes_http_source }}/{{ kubernetes_semver }}/bin/linux/{{ kubernetes_goarch }}/{{ item }}"
+    # TODO(akutz) Write a script to separately download the checksum
+    #             and verify the associated file using the correct
+    #             checksum file format
+    #checksum: "sha1:{{ kubernetes_http_source }}/bin/linux/amd64/{{ item }}.sha1"
+    dest: "/tmp/{{ item }}"
+    mode: 0600
+  loop: "{{ kubernetes_imgs }}"      
