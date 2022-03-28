@@ -33,7 +33,7 @@
     {
       "inline": [
         "cd {{user `output_directory`}}",
-        "../../hack/image-convert.sh {{user `vm_name`}} v"
+        "../../hack/convert-cloudstack-image.sh {{user `vm_name`}} v"
       ],
       "name": "convert-vmware-ova",
       "type": "shell-local"
@@ -41,7 +41,7 @@
     {
       "inline": [
         "cd {{user `output_directory`}}",
-        "../../hack/image-convert.sh {{user `vm_name`}} x"
+        "../../hack/convert-cloudstack-image.sh {{user `vm_name`}} x"
       ],
       "name": "convert-xenserver-vhd",
       "type": "shell-local"
