@@ -22,13 +22,12 @@ set -o pipefail
 
 if ! command -v faketime >/dev/null 2>&1; then
     echo "faketime must be present to convert to vhd" >&2
-    exit 1
+    exit 0
 fi
 
 if ! command -v vhd-util >/dev/null 2>&1; then
-    wget http://packages.shapeblue.com.s3-eu-west-1.amazonaws.com/systemvmtemplate/vhd-util -O /tmp/vhd-util
-    chmod +x /tmp/vhd-util
-    sudo mv /tmp/vhd-util /usr/local/bin/vhd-util
-    wget http://packages.shapeblue.com.s3-eu-west-1.amazonaws.com/systemvmtemplate/libvhd.so.1.0 -O /tmp/libvhd.so.1.0
-    sudo mv /tmp/libvhd.so.1.0 /usr/lib/libvhd.so.1.0
+    wget http://packages.shapeblue.com.s3-eu-west-1.amazonaws.com/systemvmtemplate/vhd-util
+    chmod +x vhd-util
+    wget http://packages.shapeblue.com.s3-eu-west-1.amazonaws.com/systemvmtemplate/libvhd.so.1.0
+    echo "'vhd-util' and 'libvhd.so.1.0' has been installed to $(pwd), make sure this directory is in your \$PATH"
 fi
