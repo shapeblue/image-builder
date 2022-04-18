@@ -7,6 +7,7 @@ Following which, it is then converted into `ova` for VMware and `vhd` for XenSer
 
 ### Prerequisites for building images
 
+Images can only be built on Linux Machines, and has been tested on Ubuntu 18.04 LTS.
 Execute the following command to install qemu-kvm and other packages if you are running Ubuntu 18.04 LTS.
 
 #### Installing packages to use qemu-img
