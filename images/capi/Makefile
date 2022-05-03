@@ -48,7 +48,7 @@ version: ## Display version of image-builder
 
 .PHONY: deps
 deps: ## Installs/checks all dependencies
-deps: deps-ami deps-azure deps-do deps-gce deps-ova deps-qemu deps-cloudstack deps-raw deps-oci deps-vbox
+deps: deps-ami deps-azure deps-do deps-gce deps-ova deps-qemu deps-raw deps-oci deps-vbox
 
 .PHONY: deps-ami
 deps-ami: ## Installs/checks dependencies for AMI builds
@@ -96,15 +96,6 @@ deps-qemu:
 	hack/ensure-ansible.sh
 	hack/ensure-packer.sh
 	hack/ensure-goss.sh
-
-.PHONY: deps-cloudstack
-deps-cloudstack: ## Installs/checks dependencies for CloudStack builds
-deps-cloudstack:
-	hack/ensure-ansible.sh
-	hack/ensure-packer.sh
-	hack/ensure-goss.sh
-	hack/ensure-ovftool.sh
-	hack/ensure-vhdutil.sh
 
 .PHONY: deps-raw
 deps-raw: ## Installs/checks dependencies for RAW builds
@@ -303,8 +294,6 @@ DO_BUILD_TARGETS 	:= $(addprefix build-,$(DO_BUILD_NAMES))
 DO_VALIDATE_TARGETS 	:= $(addprefix validate-,$(DO_BUILD_NAMES))
 QEMU_BUILD_TARGETS	:= $(addprefix build-,$(QEMU_BUILD_NAMES))
 QEMU_VALIDATE_TARGETS	:= $(addprefix validate-,$(QEMU_BUILD_NAMES))
-CLOUDSTACK_BUILD_TARGETS	:= $(addprefix build-,$(CLOUDSTACK_BUILD_NAMES))
-CLOUDSTACK_VALIDATE_TARGETS	:= $(addprefix validate-,$(CLOUDSTACK_BUILD_NAMES))
 RAW_BUILD_TARGETS      := $(addprefix build-,$(RAW_BUILD_NAMES))
 RAW_VALIDATE_TARGETS   := $(addprefix validate-,$(RAW_BUILD_NAMES))
 OCI_BUILD_TARGETS	:= $(addprefix build-,$(OCI_BUILD_NAMES))
@@ -402,14 +391,6 @@ $(QEMU_BUILD_TARGETS): deps-qemu
 $(QEMU_VALIDATE_TARGETS): deps-qemu
 	packer validate $(PACKER_NODE_FLAGS) -var-file="$(abspath packer/qemu/$(subst validate-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/qemu/packer.json
 
-.PHONY: $(CLOUDSTACK_BUILD_TARGETS)
-$(CLOUDSTACK_BUILD_TARGETS): deps-cloudstack
-	packer build $(PACKER_NODE_FLAGS) -var-file="$(abspath packer/cloudstack/$(subst build-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/cloudstack/packer.json
-
-.PHONY: $(CLOUDSTACK_VALIDATE_TARGETS)
-$(CLOUDSTACK_VALIDATE_TARGETS): deps-cloudstack
-	packer validate $(PACKER_NODE_FLAGS) -var-file="$(abspath packer/cloudstack/$(subst validate-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/cloudstack/packer.json
-
 .PHONY: $(RAW_BUILD_TARGETS)
 $(RAW_BUILD_TARGETS): deps-raw
 	packer build $(PACKER_NODE_FLAGS) -var-file="$(abspath packer/raw/$(subst build-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/raw/packer.json
@@ -447,11 +428,6 @@ QEMU_CLEAN_TARGETS := $(subst build-,clean-,$(QEMU_BUILD_TARGETS))
 .PHONY: $(QEMU_CLEAN_TARGETS)
 $(QEMU_CLEAN_TARGETS):
 	rm -fr output/$(subst clean-qemu-,,$@)-kube*
-
-CLOUDSTACK_CLEAN_TARGETS := $(subst build-,clean-,$(CLOUDSTACK_BUILD_TARGETS))
-.PHONY: $(CLOUDSTACK_CLEAN_TARGETS)
-$(CLOUDSTACK_CLEAN_TARGETS):
-	rm -fr output/$(subst clean-cloudstack-,,$@)-kube*
 
 RAW_CLEAN_TARGETS := $(subst build-,clean-,$(RAW_BUILD_TARGETS))
 .PHONY: $(RAW_CLEAN_TARGETS)
@@ -568,11 +544,6 @@ build-qemu-rhel-8: ## Builds RHEL 8 QEMU image
 build-qemu-rockylinux-8: ## Builds Rocky 8 QEMU image
 build-qemu-all: $(QEMU_BUILD_TARGETS) ## Builds all Qemu images
 
-build-cloudstack-ubuntu-2004: ## Builds Ubuntu 20.04 CloudStack images
-build-cloudstack-rhel-8: ## Builds RHEL 8 CloudStack images
-build-cloudstack-rockylinux-8: ## Builds Rocky 8 CloudStack images
-build-cloudstack-all: $(CLOUDSTACK_BUILD_TARGETS) ## Builds all CloudStack images
-
 build-raw-ubuntu-1804: ## Builds Ubuntu 18.04 RAW image
 build-raw-ubuntu-2004: ## Builds Ubuntu 20.04 RAW image
 build-raw-ubuntu-2004-efi: ## Builds Ubuntu 20.04 RAW image that EFI boots
@@ -662,11 +633,6 @@ validate-qemu-rhel-8: ## Validates RHEL 8 QEMU image
 validate-qemu-rockylinux-8: ## Validates Rocky Linux 8 QEMU image packer config
 validate-qemu-all: $(QEMU_VALIDATE_TARGETS) ## Validates all Qemu Packer config
 
-validate-cloudstack-ubuntu-2004: ## Validates Ubuntu 20.04 CloudStack image packer config
-validate-cloudstack-rhel-8: ## Validates RHEL 8 CloudStack image
-validate-cloudstack-rockylinux-8: ## Validates Rocky Linux 8 CloudStack image packer config
-validate-cloudstack-all: $(CLOUDSTACK_VALIDATE_TARGETS) ## Validates all CloudStack Packer config
-
 validate-raw-ubuntu-1804: ## Validates Ubuntu 18.04 RAW image packer config
 validate-raw-ubuntu-2004: ## Validates Ubuntu 20.04 RAW image packer config
 validate-raw-ubuntu-2004-efi: ## Validates Ubuntu 20.04 RAW EFI image packer config
@@ -686,7 +652,6 @@ validate-all: validate-ami-all \
 	validate-gce-all \
 	validate-node-ova-local-all \
 	validate-qemu-all \
-	validate-cloudstack-all \
 	validate-raw-all \
 	validate-oci-all \
 	validate-vbox-all
@@ -707,10 +672,6 @@ clean-ova: $(NODE_OVA_LOCAL_CLEAN_TARGETS)
 .PHONY: clean-qemu
 clean-qemu: ## Removes all qemu image output directories (see NOTE at top of help)
 clean-qemu: $(QEMU_CLEAN_TARGETS)
-
-.PHONY: clean-cloudstack
-clean-cloudstack: ## Removes all CloudStack images output directories (see NOTE at top of help)
-clean-cloudstack: $(CLOUDSTACK_CLEAN_TARGETS)
 
 .PHONY: clean-raw
 clean-raw: ## Removes all raw image output directories (see NOTE at top of help)
