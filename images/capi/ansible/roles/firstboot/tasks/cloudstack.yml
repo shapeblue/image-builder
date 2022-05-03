@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include_tasks: photon.yml
-  when: ansible_os_family == "VMware Photon OS"
+- name: Run setup as firstboot in case of CloudStack
+  include_role:
+    name: setup
 
-- include_tasks: cloudstack.yml
-  when: packer_builder_type is search('qemu') and
-    provider is search('cloudstack')

@@ -51,11 +51,11 @@
   loop: "{{ extra_repos.split() }}"
   when: extra_repos != ""
 
-- name: perform a dist-upgrade
-  apt:
-    force_apt_get: True
-    update_cache: True
-    upgrade: dist
+# - name: perform a dist-upgrade
+#   apt:
+#     force_apt_get: True
+#     update_cache: True
+#     upgrade: dist
 
 - name: install baseline dependencies
   apt:
