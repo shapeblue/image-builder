@@ -100,7 +100,7 @@
   "variables": {
     "accelerator": "kvm",
     "ansible_common_vars": "",
-    "ansible_extra_vars": "ansible_python_interpreter=/usr/bin/python3",
+    "ansible_extra_vars": "ansible_python_interpreter=/usr/bin/python3 {{env `ANSIBLE_EXTRA_ARGS`}}",
     "boot_media_path": "http://{{ .HTTPIP }}:{{ .HTTPPort }}",
     "boot_wait": "10s",
     "build_timestamp": "{{timestamp}}",
