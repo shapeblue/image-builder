@@ -52,7 +52,7 @@ For building a ubuntu-2004 based capi image, run the following commands -
 ```bash
 $ git clone https://github.com/kubernetes-sigs/image-builder.git
 $ cd image-builder/images/capi/
-$ ANSIBLE_EXTRA_ARGS="provider=cloudstack" make build-qemu-ubuntu-2004
+$ ANSIBLE_EXTRA_VARS="provider=cloudstack" make build-qemu-ubuntu-2004
 ```
 
 ### XenServer Hypervisor
