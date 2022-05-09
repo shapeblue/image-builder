@@ -7,6 +7,30 @@
 - name: Kubeadm pull images
   shell: 'kubeadm config images pull --config /etc/kubeadm.yml --cri-socket {{ containerd_cri_socket }}'
 
+- name: Download calico yaml
+  get_url:
+    url: https://projectcalico.docs.tigera.io/manifests/calico.yaml
+    dest: /etc/calico.yml
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Get images from calico yaml
+  shell: "grep \"image: \" /etc/calico.yml | cut -d ':' -f2- | tr -d ' '"
+  register: calico_images
+
+- name: Echo images
+  debug:
+    var: calico_images
+
+- name: Calico pull images
+  shell: ctr images pull {{ item }}
+  with_items:
+  - "{{ calico_images.stdout_lines }}"
+
+- name: List local images
+  shell: ctr images ls
+
 - name: Delete kubeadm config
   file:
     path: /etc/kubeadm.yml
