@@ -15,7 +15,5 @@
 - include_tasks: photon.yml
   when: ansible_os_family == "VMware Photon OS"
 
-- include_tasks: cloudstack.yml
-  when: packer_builder_type is search('qemu') and
-      provider is defined and
-      provider is search('cloudstack')
+- include_tasks: qemu.yml
+  when: packer_builder_type is search('qemu')

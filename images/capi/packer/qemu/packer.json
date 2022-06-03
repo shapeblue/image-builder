@@ -72,7 +72,6 @@
       ],
       "expect_disconnect": true,
       "inline": [
-        "if [[ $PROVIDER != *\"cloudstack\"* ]]; then exit 0; fi",
         "sudo reboot now"
       ],
       "inline_shebang": "/bin/bash -e",

@@ -23,6 +23,4 @@ dependencies:
     vars:
       rpms: "{{ ( ( common_rpms + rh7_rpms + lookup('vars', 'common_' + build_target + '_rpms') ) if (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7') else ( common_rpms + rh8_rpms + lookup('vars', 'common_' + build_target + '_rpms') ) ) }}"
       debs: "{{ common_debs +  lookup('vars', 'common_' + build_target + '_debs') }}"
-    when: packer_builder_type is search('qemu') and
-      provider is defined and
-      provider is search('cloudstack')
+    when: packer_builder_type is search('qemu')
